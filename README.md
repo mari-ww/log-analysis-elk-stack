@@ -4,84 +4,67 @@
 [![Nível](https://img.shields.io/badge/nível-iniciante-blue)]()
 [![Ferramentas](https://img.shields.io/badge/stack-ELK%20Stack-orange)]()
 
-## 🔍 Descrição
-
-Projeto prático simulando o dia a dia de um **Analista SOC** com foco em ingestão e visualização de logs Apache utilizando a **ELK Stack (Elasticsearch, Logstash, Kibana)**. O objetivo é identificar padrões suspeitos, IPs fora do comum e códigos HTTP que possam indicar comportamento anômalo.
-
----
+## 📦 Estrutura do Projeto
 
 ```bash
-📦 log-analysis-elk-stack/
+log-analysis-elk-stack/
 ├── kibana_dashboard/                 <- Prints das visualizações e dashboard
-├── logstash.conf                     <- Configuração para ingestão dos logs
-├── apache_logs_sample.log           <- Dataset analisado
-└── README.md                         <- Este arquivo
+├── logstash/                        <- Configuração de Logstash e logs
+│   ├── apache_logs.log              <- Logs de exemplo
+│   └── pipeline.conf                <- Configuração do pipeline do Logstash
+└── docker-compose.yml               <- Arquivo para executar o projeto com Docker, configurando os containers necessários para rodar o ELK Stack de forma simplificada
 ```
 
----
+## 🧠 Objetivo
+Simular um cenário SOC utilizando a ELK Stack (Elasticsearch, Logstash e Kibana) para analisar logs de acesso Apache. O objetivo é identificar possíveis ataques, como tentativas de exploração automatizada, negação de serviço (DoS), e reconhecimento de rede.
 
-## 🛠️ Tecnologias e Ferramentas
+## 📸 Evidências da Análise
 
-- 🔎 **Kibana** – Visualizações e dashboard interativo  
-- 💾 **Elasticsearch** – Armazenamento/indexação dos logs  
-- 🔧 **Logstash** – Parsing dos logs de acesso do Apache  
-- 🌐 **Apache Access Logs** – Fonte de dados  
-- 🐧 **Linux/Ubuntu** – Ambiente de desenvolvimento
-
----
-
-## 📈 Visualizações Criadas
-
-### 📊 Top 10 IPs de Origem  
-> IPs que mais acessaram o servidor.
-
-![Top 10 IPs](./kibana_dashboard/top-10-ips.png)
-
----
-
-### ⏱️ Requisições por Minuto  
-> Tráfego ao longo do tempo – ajuda a detectar picos de atividade.
-
-![Requests per Minute](./kibana_dashboard/requests-per-minute.png)
-
----
-
-### 📋 Códigos HTTP Frequentes  
-> Frequência de status HTTP (200, 404, 500...).
-
-![HTTP Status Codes](./kibana_dashboard/http-status-codes.png)
-
----
-
-### 🧠 IPs ao Longo do Tempo *(extra)*  
-> Comportamento dos principais IPs em formato de linha do tempo.
-
-![Top IPs Timeline](./kibana_dashboard/top-ips-timeline.png)
-
----
-
-## 🧩 Dashboard Final
-
-> Visão consolidada com todas as visualizações em um painel dinâmico.
-
+### 🖼️ 1. Dashboard Geral
 ![Dashboard](./kibana_dashboard/dashboard.png)
+- Visão macro do ambiente: IPs, requisições por minuto, status HTTP e tendências.  
+- Ideal para uma análise rápida e para identificar anomalias visuais.
 
 ---
 
-## ✅ Status do Projeto
-
-- [x] Instalação e configuração do ELK Stack  
-- [x] Parsing dos logs Apache com Logstash  
-- [x] Criação de visualizações no Kibana  
-- [x] Montagem do dashboard final  
-- [x] Documentação e screenshots
+### 🖼️ 2. Top 10 IPs Suspeitos
+![Top 10 IPs](./kibana_dashboard/top-10-ips.png)
+- Alguns IPs fazem um número absurdo de requisições.  
+- Padrão típico de bots ou scanners automáticos.  
+- Pode indicar mapeamento de endpoints ou testes de vulnerabilidades.
 
 ---
 
-## 📌 Dataset usado
-
-🔗 [Apache Logs - Elastic Sample](https://github.com/elastic/examples/blob/master/Common%20Data%20Formats/apache_logs/apache_logs)
+### 🖼️ 3. Linha do Tempo dos IPs
+![Top IPs Timeline](./kibana_dashboard/top-ips-timeline.png)
+- Picos de acesso em horários específicos ⏰.  
+- Indica scripts programados ou ciclos de execução automáticos.  
+- 💣 Potencial ataque agendado ou reconhecimento sistemático.
 
 ---
 
-> 💡 *Este projeto demonstra minha capacidade de analisar logs em um contexto SOC, configurar pipelines com ELK Stack e montar dashboards de visualização que apoiam a detecção de atividades suspeitas em tempo real.*
+### 🖼️ 4. Requisições por Minuto
+![Requests per Minute](./kibana_dashboard/requests-per-minute.png)
+-  Picos evidentes de tráfego.
+-  Pode sugerir ataques leves de DoS ou fuzzing.
+-  Sobrecarrega sistemas frágeis.
+
+---
+
+### 🖼️ 5. Códigos de Status HTTP
+![HTTP Status Codes](./kibana_dashboard/http-status-codes.png)
+-  404 excessivos → tentativa de descobrir URLs escondidas.
+-  500 elevados → possíveis falhas causadas por requisições maliciosas.
+-  Ideal para capturar comportamento de exploração automatizada.
+
+---
+
+## ✅ Conclusão
+O uso do ELK Stack permitiu uma análise eficiente dos logs Apache, identificando padrões suspeitos e ajudando na detecção de possíveis atividades maliciosas. A visualização das informações no Kibana torna a análise SOC mais dinâmica, permitindo uma resposta rápida a incidentes.
+
+## 🧰 Ferramentas Usadas
+- **Kibana** – Visualizações e dashboard interativo
+- **Elasticsearch** – Armazenamento e indexação dos logs
+- **Logstash** – Ingestão e parsing dos logs Apache
+- **Apache Access Logs** – Dados analisados
+- **Docker** – Para facilitar a execução do projeto
